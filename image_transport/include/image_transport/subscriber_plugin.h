@@ -118,6 +118,9 @@ public:
    */
   virtual void shutdown() = 0;
 
+  virtual void enable(const bool &state) const = 0;
+  virtual bool enable() const = 0;
+
   /**
    * \brief Return the lookup name of the SubscriberPlugin associated with a specific
    * transport identifier.

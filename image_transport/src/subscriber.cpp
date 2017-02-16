@@ -65,7 +65,7 @@ struct Subscriber::Impl
         subscriber_->shutdown();
     }
   }
-  
+
   SubLoaderPtr loader_;
   boost::shared_ptr<SubscriberPlugin> subscriber_;
   bool unsubscribed_;
@@ -132,6 +132,11 @@ std::string Subscriber::getTransport() const
 void Subscriber::shutdown()
 {
   if (impl_) impl_->shutdown();
+}
+
+void Subscriber::enable(const bool &state) const
+{
+  if (impl_) impl_->subscriber_->enable(state);
 }
 
 Subscriber::operator void*() const

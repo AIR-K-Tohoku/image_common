@@ -81,6 +81,16 @@ public:
     if (simple_impl_) simple_impl_->sub_.shutdown();
   }
 
+  void enable(const bool &state) const
+  {
+    if (simple_impl_) simple_impl_->enable_ = state;
+  }
+  bool enable() const
+  {
+    if (!simple_impl_) return false;
+    return simple_impl_->enable_;
+  }
+
 protected:
   /**
    * \brief Process a message. Must be implemented by the subclass.
@@ -111,6 +121,7 @@ protected:
     simple_impl_->sub_ = nh.subscribe<M>(getTopicToSubscribe(base_topic), queue_size,
                                          boost::bind(&SimpleSubscriberPlugin::internalCallback, this, _1, callback),
                                          tracked_object, transport_hints.getRosHints());
+    simple_impl_->enable_ = true;
   }
 
   /**
@@ -131,6 +142,7 @@ private:
     
     const ros::NodeHandle param_nh_;
     ros::Subscriber sub_;
+    bool enable_;
   };
   
   boost::scoped_ptr<SimpleSubscriberPluginImpl> simple_impl_;

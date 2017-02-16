@@ -50,6 +50,10 @@ int main(int argc, char** argv)
 
   image_transport::ImageTransport it(nh);
   image_transport::Subscriber sub;
+
+  ros::NodeHandle pnh("~");
+  bool lazy;
+  pnh.param("lazy", lazy, false);
   
   if (argc < 3) {
     // Use all available transports for output
@@ -79,7 +83,17 @@ int main(int argc, char** argv)
     PublishMemFn pub_mem_fn = &Plugin::publish;
     sub = it.subscribe(in_topic, 1, boost::bind(pub_mem_fn, pub.get(), _1), pub, in_transport);
 
-    ros::spin();
+    ros::Rate r(10.0);
+    while (ros::ok())
+    {
+      r.sleep();
+      ros::spinOnce();
+      if (lazy)
+      {
+        // decode only if there are active subscribers
+        sub.enable(pub->getNumSubscribers() > 0);
+	  }
+    }
   }
 
   return 0;

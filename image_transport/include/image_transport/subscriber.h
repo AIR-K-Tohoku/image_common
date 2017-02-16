@@ -86,6 +86,8 @@ public:
    */
   void shutdown();
 
+  void enable(const bool &state) const;
+
   operator void*() const;
   bool operator< (const Subscriber& rhs) const { return impl_ <  rhs.impl_; }
   bool operator!=(const Subscriber& rhs) const { return impl_ != rhs.impl_; }
